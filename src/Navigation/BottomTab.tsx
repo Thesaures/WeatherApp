@@ -22,6 +22,7 @@ const BottomNavigation = () => {
           headerShown: false,
         }}
       />
+
       <Stack.Screen
         name="Search"
         component={Search}

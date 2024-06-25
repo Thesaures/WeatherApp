@@ -28,7 +28,7 @@ const HourCard = (prop: hour) => {
         <Text style={Style.text}>{time}</Text>
       </View>
       <View>
-        <Cloud height={hp(9)} width={wp(14)} style={{ bottom: 5 }} />
+        <Cloud height={hp(9)} width={wp(14)} style={{ bottom: 4 }} />
       </View>
       <View style={Style.temp}>
         <Text style={Style.text}>{temp}</Text>

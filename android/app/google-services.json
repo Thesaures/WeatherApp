@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "432677398217",
+    "project_id": "watherupdate",
+    "storage_bucket": "watherupdate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432677398217:android:6dc89137726fddf1678f18",
+        "android_client_info": {
+          "package_name": "com.weatherapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxBUxjtFnoWJb64Nk6ov4CL38l5fDUaG8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

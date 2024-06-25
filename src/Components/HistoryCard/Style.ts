@@ -13,11 +13,12 @@ const style = StyleSheet.create({
     zIndex: 2,
     position: 'absolute',
     padding: wp(4),
+    marginTop: hp(2),
   },
   temp: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: wp(20),
+    // justifyContent: 'space-between',
+    // width: wp(22),
   },
   place: {
     width: wp(80),
@@ -26,7 +27,7 @@ const style = StyleSheet.create({
   },
   currTemp: {
     color: 'white',
-    fontSize: hp(10),
+    fontSize: hp(8),
   },
   textPlace: {
     color: 'white',
@@ -43,6 +44,11 @@ const style = StyleSheet.create({
   current: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  currentLow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: wp(4),
   },
 });
 export default style;

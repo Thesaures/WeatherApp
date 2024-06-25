@@ -1,16 +1,16 @@
 import GetLocation from 'react-native-get-location';
 import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 
-export async function deviceLocation(): Promise<{ latitude: Float; longitude: Float }> {
-  let latitude: Float = 0;
-  let longitude: Float = 0;
+export async function deviceLocation(): Promise<{ lat: Float; lon: Float }> {
+  let lat: Float = 0;
+  let lon: Float = 0;
   try {
     const location = await GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 60000,
     });
-    latitude = location.latitude;
-    longitude = location.longitude;
+    lat = location.latitude;
+    lon = location.longitude;
   } catch (error) {}
-  return { latitude, longitude };
+  return { lat, lon };
 }

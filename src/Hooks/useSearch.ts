@@ -1,19 +1,18 @@
 import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 import apiClient from '../Axios/apiClient';
-type ExtendedCreateUserResponse = {
-  success: boolean;
-  errorMessage: string;
-  statusCode: string;
-  detailsTask: object;
-};
-export async function searchPlace(place: string): Promise<ExtendedCreateUserResponse> {
+import { lonlat } from '../Types/StackLIst';
+export async function useSearchPlace(place: string) {
+  console.log('this is place', place);
   let success: boolean = false;
   let errorMessage: string = '';
   let statusCode: string = '';
-  let detailsTask: object = {};
+  let detailsTask: lonlat = {
+    longitude: 0,
+    latitude: 0,
+  };
   try {
     const createUserResponse = await apiClient.get(
-      `https://geocoding-api.open-meteo.com/v1/search?name=kerala&count=1&language=en&format=json`
+      `https://geocoding-api.open-meteo.com/v1/search?name=${place}&count=1&language=en&format=json`
     );
 
     statusCode = createUserResponse.status.toString();

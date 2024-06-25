@@ -29,12 +29,12 @@ import {
 import { weatherStackList } from '../../Types/StackLIst';
 import HourCard from '../../Components/HourCard/Index';
 import { deviceLocation } from '../../Hooks/useDeviceLocation';
-import { weatherDetails } from '../../Hooks/useLocationWeather';
-import { reverseGeocode } from '../../Hooks/useCity';
+import { useWeatherDetails } from '../../Hooks/useLocationWeather';
+// import { reverseGeocode } from '../../Hooks/useCity';
 import { selectStatus } from '../../Utils/helper';
-import { hourWeatherDetails } from '../../Hooks/useHourWeather';
+import { useHourWeatherDetails } from '../../Hooks/useHourWeather';
 import { setTime } from '../../Utils/helper';
-import { weeklyWeatherDetails } from '../../Hooks/useWeeklyWeather';
+import { useWeeklyWeatherDetails } from '../../Hooks/useWeeklyWeather';
 import { setWeek } from '../../Utils/helper';
 import {
   widthPercentageToDP as wp,
@@ -56,6 +56,7 @@ const LocationDetails = () => {
   const route: any = useRoute();
   const lon = route.params.longitude;
   const lat = route.params.latitude;
+
   console.log('this is latitude and longitude', lat, lon);
   const translationX = useSharedValue(0);
   // const size = useSharedValue({ width: 100, height: 50 });
@@ -166,7 +167,7 @@ const LocationDetails = () => {
   useEffect(() => {
     const getDetails = async () => {
       try {
-        const { detailsTask } = await weatherDetails(lon, lat);
+        const { detailsTask } = await useWeatherDetails(lon, lat);
         // console.log('details ', detailsTask);
         // const placeName = await reverseGeocode(latitude, longitude);
 
@@ -178,8 +179,8 @@ const LocationDetails = () => {
         setTemp(detailsTask.current.temperature_2m);
         setTempH(detailsTask.daily.temperature_2m_max);
         setTempL(detailsTask.daily.temperature_2m_min);
-        const { hourDetails } = await hourWeatherDetails(lon, lat);
-        const { weekDetails } = await weeklyWeatherDetails(lon, lat);
+        const { hourDetails } = await useHourWeatherDetails(lon, lat);
+        const { weekDetails } = await useWeeklyWeatherDetails(lon, lat);
         const weekArray = setWeek(weekDetails.daily.time, weekDetails.daily.temperature_2m_max);
         setWeekArray(weekArray);
         const newArray = setTime(hourDetails.hourly.time, hourDetails.hourly.temperature_2m);

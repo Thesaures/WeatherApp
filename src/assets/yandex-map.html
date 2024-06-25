@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yandex Map</title>
+    <script src="https://api-maps.yandex.com/2.1/?lang=en_RU"></script>
+  </head>
+  <body>
+    <div id="map" style="width: 100%; height: 100vh"></div>
+    <script>
+      ymaps.ready(init);
+      function init() {
+        var map = new ymaps.Map('map', {
+          center: [76.29036, 9.96714],
+          zoom: 10,
+        });
+
+        map.events.add('click', function (e) {
+          var coords = e.get('coords');
+          var latitude = coords[0];
+          var longitude = coords[1];
+          window.ReactNativeWebView.postMessage(
+            JSON.stringify({ latitude: latitude, longitude: longitude })
+          );
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 const numberToStringMap = {
   0: 'Clear sky',
   1: 'Cloudy',
@@ -29,7 +31,7 @@ const numberToStringMap = {
   99: 'Thunderstorm with heavy hail',
 };
 let weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-type WeatherStatusKey = keyof typeof numberToStringMap;
+export type WeatherStatusKey = keyof typeof numberToStringMap;
 export function selectStatus(num: WeatherStatusKey) {
   return numberToStringMap[num];
 }
@@ -55,4 +57,8 @@ export function setWeek(week: string[], temparature: string[]) {
     return { day: dayName, temp: temparature[index] };
   });
   return weekArray;
+}
+
+export function showActive(setActive: any, active: boolean) {
+  setActive(!active);
 }
