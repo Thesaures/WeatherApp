@@ -49,17 +49,7 @@ const Search = () => {
       <View style={style.heading}>
         <Text style={style.headingText}>History</Text>
       </View>
-      <View style={style.input}>
-        <Icon name="search" size={hp(4)} color={'#9D9AB0'} />
-        <TextInput
-          style={style.inputText}
-          placeholder="Search for a city or airport"
-          placeholderTextColor={'#9D9AB0'}
-          onChangeText={setPlace}
-          value={place}
-          // onSubmitEditing={clickMe}
-        ></TextInput>
-      </View>
+
       <View style={style.body}>
         {/* <SvgWithBackgroundVideo />
         <Sungraph /> */}
@@ -67,8 +57,8 @@ const Search = () => {
           data={info}
           renderItem={({ item, index }) => (
             <HistoryCard
-              lon={item.latitude}
-              lat={item.longitude}
+              lon={item.longitude}
+              lat={item.latitude}
               place={item.location}
               index={index}
               selectedCard={selectedCard}

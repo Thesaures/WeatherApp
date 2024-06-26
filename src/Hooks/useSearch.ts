@@ -2,7 +2,6 @@ import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 import apiClient from '../Axios/apiClient';
 import { lonlat } from '../Types/StackLIst';
 export async function useSearchPlace(place: string) {
-  console.log('this is place', place);
   let success: boolean = false;
   let errorMessage: string = '';
   let statusCode: string = '';
@@ -14,7 +13,6 @@ export async function useSearchPlace(place: string) {
     const createUserResponse = await apiClient.get(
       `https://geocoding-api.open-meteo.com/v1/search?name=${place}&count=1&language=en&format=json`
     );
-
     statusCode = createUserResponse.status.toString();
     {
       statusCode === '200' ? (success = true) : (success = false);

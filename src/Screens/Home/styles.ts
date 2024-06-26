@@ -14,7 +14,8 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: wp(15),
+    width: wp(13),
+    marginLeft: wp(3),
   },
   climate: {
     position: 'absolute',

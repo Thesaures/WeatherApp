@@ -41,7 +41,7 @@ const HistoryCard = (prop: location) => {
   }, []);
   const updateBorder = async () => {
     setSelectedCard(index);
-    navigation.replace('Home', { lati: lon, longi: lat, loc: place });
+    navigation.replace('Home', { lati: lat, longi: lon, loc: place });
   };
   const hiddenStyle = useAnimatedStyle(() => {
     return {

@@ -15,7 +15,7 @@ const style = StyleSheet.create({
     justifyContent: 'center',
   },
   body: {
-    flex: 0.8,
+    flex: 0.9,
   },
   headingText: {
     color: 'white',

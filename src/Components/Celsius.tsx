@@ -20,8 +20,8 @@ const Celsius = (props: dimension) => {
         borderColor: 'white',
         borderRadius: 50,
         bottom: '10%',
-        marginTop: wp(1),
-        // marginLeft: wp(1),
+        // marginTop: wp(1),
+        marginLeft: wp(0.5),
       }}
     ></View>
   );

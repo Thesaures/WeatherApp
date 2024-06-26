@@ -35,6 +35,7 @@ import Logo from '../../assets/bottomTab.svg';
 import Top from '../../assets/top.svg';
 import style from './styles';
 import { climateData, Search, weekData } from '../../Types/StackLIst';
+import { useCity } from '../../Hooks/useCity';
 const Home = () => {
   const image = useImage(require('../../assets/House.png'));
   const background = useImage(require('../../assets/Mountain.png'));
@@ -57,9 +58,9 @@ const Home = () => {
   const [showBottom, setShowBottom] = useState(false);
   const [weekArray, setWeekArray] = useState<weekData[]>([]);
   const route: any = useRoute();
-  const { lati, longi, loc } = route.params || { lati: null, longi: null };
-  let longitude: Float;
-  let latitude: Float;
+  // const { lati, longi, loc } = route.params || { lati: null, longi: null };
+  // let longitude: Float;
+  // let latitude: Float;
   const { width, height } = Dimensions.get('screen');
   const MIN_TRANSLATION_Y = -height * 0.38;
   function clamp(val: any) {
@@ -80,7 +81,7 @@ const Home = () => {
     .onStart(() => {
       prevTranslationY.value = translationY.value;
     })
-    .activateAfterLongPress(1500)
+    .activateAfterLongPress(800)
     .onUpdate((event) => {
       translationY.value = clamp(prevTranslationY.value + event.translationY);
       if (translationY.value == 0) {
@@ -122,7 +123,7 @@ const Home = () => {
     const { detailsTask } = await useSearchPlace(place);
     setLon(detailsTask.longitude);
     setLat(detailsTask.latitude);
-
+    console.log('entered', detailsTask.longitude, detailsTask.latitude);
     const storeData = async (value: Search) => {
       try {
         const jsonValue = await AsyncStorage.getItem('key');
@@ -145,8 +146,8 @@ const Home = () => {
       });
       console.log('this is passed data first :', detailsTask.longitude, detailsTask.latitude);
       navigation.push('Home', {
-        lati: detailsTask.longitude,
-        longi: detailsTask.latitude,
+        lati: detailsTask.latitude,
+        longi: detailsTask.longitude,
         loc: place,
       });
       setShow(false);
@@ -172,46 +173,64 @@ const Home = () => {
   useEffect(() => {
     const getDetails = async () => {
       try {
-        if (lati !== null && lati !== undefined && longi !== null && longi !== undefined) {
-          longitude = longi;
-          latitude = lati;
-          setPlaceName(loc);
-          console.log('this is the data i got', longi, lati, loc);
+        if (route.params) {
+          const { lati, longi, loc } = route.params;
+          if (lati !== null && lati !== undefined && longi !== null && longi !== undefined) {
+            setPlaceName(loc);
+            console.log('Received params:', longi, lati, loc);
+
+            const { detailsTask } = await useWeatherDetails(longi, lati);
+            const { hourDetails } = await useHourWeatherDetails(longi, lati);
+            const { weekDetails } = await useWeeklyWeatherDetails(longi, lati);
+
+            const weekArray = setWeek(weekDetails.daily.time, weekDetails.daily.temperature_2m_max);
+            const situa = selectStatus(detailsTask.current.weather_code);
+            const newArray = setTime(hourDetails.hourly.time, hourDetails.hourly.temperature_2m);
+            console.log('details ', detailsTask);
+
+            setStatus(situa);
+            setTemp(detailsTask.current.temperature_2m);
+            setTempH(detailsTask.daily.temperature_2m_max);
+            setTempL(detailsTask.daily.temperature_2m_min);
+            setWeekArray(weekArray);
+            setDataArray(newArray);
+            if (newArray) {
+              setLoader(false);
+            }
+          }
         } else {
           const { lat, lon } = await deviceLocation();
-          longitude = lon;
-          latitude = lat;
-        }
+          const { detailsTask } = await useWeatherDetails(lon, lat);
+          const { hourDetails } = await useHourWeatherDetails(lon, lat);
+          const { weekDetails } = await useWeeklyWeatherDetails(lon, lat);
 
-        const { detailsTask } = await useWeatherDetails(longitude, latitude);
-        // console.log('details ', detailsTask);
-        // const placeName = await reverseGeocode(latitude, longitude);
-        // console.log('this is place name', placeName);
-        // const place = placeName.split(',');
-        // const city = place[0];
+          const weekArray = setWeek(weekDetails.daily.time, weekDetails.daily.temperature_2m_max);
+          const situa = selectStatus(detailsTask.current.weather_code);
+          const newArray = setTime(hourDetails.hourly.time, hourDetails.hourly.temperature_2m);
+          const placeName = await useCity(lat, lon);
+          console.log('this is place name', placeName);
+          const place = placeName.split(',');
+          const city = place[0];
 
-        // setPlaceName(city);
+          setPlaceName(city);
 
-        const { hourDetails } = await useHourWeatherDetails(longitude, latitude);
-        const { weekDetails } = await useWeeklyWeatherDetails(longitude, latitude);
-        const weekArray = setWeek(weekDetails.daily.time, weekDetails.daily.temperature_2m_max);
-        const situa = selectStatus(detailsTask.current.weather_code);
-        const newArray = setTime(hourDetails.hourly.time, hourDetails.hourly.temperature_2m);
-        setStatus(situa);
-        setTemp(detailsTask.current.temperature_2m);
-        setTempH(detailsTask.daily.temperature_2m_max);
-        setTempL(detailsTask.daily.temperature_2m_min);
-        setWeekArray(weekArray);
-        setDataArray(newArray);
-        if (newArray) {
-          setLoader(false);
+          setStatus(situa);
+          setTemp(detailsTask.current.temperature_2m);
+          setTempH(detailsTask.daily.temperature_2m_max);
+          setTempL(detailsTask.daily.temperature_2m_min);
+          setWeekArray(weekArray);
+          setDataArray(newArray);
+          if (newArray) {
+            setLoader(false);
+          }
         }
       } catch (error) {
         console.log(error);
       }
     };
     getDetails();
-  }, [lati, longi]);
+  }, [route.params]);
+
   return (
     <>
       {loader ? (
@@ -224,7 +243,6 @@ const Home = () => {
             backgroundColor: '#352E64',
           }}
         >
-          <Text style={{ color: 'white', fontSize: hp(8) }}>WeatherApp</Text>
           <LoaderKit style={{ width: 50, height: 50 }} name={'BallPulse'} color={'white'} />
         </View>
       ) : (
@@ -249,10 +267,14 @@ const Home = () => {
               topShowStyle,
             ]}
           >
-            <Text style={style.place}>Kakkanad</Text>
+            <Text style={style.place}>{placeName}</Text>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={style.topTemp}>19 </Text>
-              <Text style={style.currClimate}>| Mostly Cloudy</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={style.topTemp}>{temp} </Text>
+                <Celsius height={0.8} width={1.6} border={1} />
+              </View>
+
+              <Text style={style.currClimate}> | {status}</Text>
             </View>
           </Animated.View>
           {/* THIS IS MODAL */}
